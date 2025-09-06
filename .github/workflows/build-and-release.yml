@@ -1,0 +1,88 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget make zip
+        
+    - name: Setup Docker for amd64 emulation (if needed)
+      run: |
+        docker run --privileged --rm tonistiigi/binfmt --install all
+        
+    - name: Build public assets
+      run: make public
+      
+    - name: Install npm dependencies
+      run: npm install
+      
+    - name: Build production bundle
+      run: NODE_ENV=production npm run build
+      
+    - name: Create release archive
+      run: |
+        # Create a zip file with the public folder contents
+        cd public
+        zip -r ../openscad-playground-release.zip .
+        cd ..
+        
+    - name: Get version from tag
+      id: get_version
+      run: |
+        if [[ $GITHUB_REF == refs/tags/* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        else
+          VERSION="dev-$(date +%Y%m%d-%H%M%S)"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.get_version.outputs.version }}
+        name: OpenSCAD Playground ${{ steps.get_version.outputs.version }}
+        body: |
+          OpenSCAD Playground Release ${{ steps.get_version.outputs.version }}
+          
+          This release contains the built OpenSCAD Playground application ready for deployment.
+          
+          ## Contents
+          - Complete web application bundle
+          - OpenSCAD WASM binary and libraries
+          - All required assets and dependencies
+          
+          ## Installation
+          1. Download the `openscad-playground-release.zip` file
+          2. Extract to your web server directory
+          3. Serve the contents via HTTP/HTTPS
+          
+          ## Features
+          - Web-based OpenSCAD editor with live preview
+          - Syntax highlighting and autocomplete
+          - Built-in library support
+          - PWA support for offline use
+        files: openscad-playground-release.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
