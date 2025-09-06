@@ -39,6 +39,13 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
         fi
         
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./public
+        cname: ${{ github.repository_owner }}.github.io
+        
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
@@ -48,6 +55,12 @@ jobs:
           OpenSCAD Playground Release ${{ steps.get_version.outputs.version }}
           
           This release contains the built OpenSCAD Playground application ready for deployment.
+          
+          ## Live Demo
+          🌐 **[View Live Demo](https://${{ github.repository_owner }}.github.io/openscad-playground)**
+          
+          ## Download
+          Download the `openscad-playground-release.zip` file below for self-hosting.
         files: openscad-playground-release.zip
         draft: false
         prerelease: false
