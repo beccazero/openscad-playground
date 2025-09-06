@@ -5,6 +5,7 @@ import { SingleLayoutComponentId } from '../state/app-state.ts'
 import { TabMenu } from 'primereact/tabmenu';
 import { ToggleButton } from 'primereact/togglebutton';
 import { ModelContext } from './contexts.ts';
+import FilePicker from './FilePicker.tsx';
 
 export default function PanelSwitcher() {
   const model = useContext(ModelContext);
@@ -23,11 +24,15 @@ export default function PanelSwitcher() {
 
   return (
     <div className="">
+
       <div className='flex flex-row' style={{
         margin: '5px',
         position: 'relative',
       }}>
-
+                     <FilePicker 
+            style={{
+              flex: 1,
+            }}/>
         {state.view.layout.mode === 'multi'
           ?   <div className='flex flex-row gap-1' style={{
             justifyContent: 'center',

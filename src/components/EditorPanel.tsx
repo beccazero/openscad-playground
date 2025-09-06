@@ -144,11 +144,6 @@ export default function EditorPanel({className, style}: {className?: string, sty
           },
         ] as MenuItem[]} popup ref={menu} />
         <Button title="Editor menu" rounded text icon="pi pi-ellipsis-h" onClick={(e) => menu.current && menu.current.toggle(e)} />
-        
-        <FilePicker 
-            style={{
-              flex: 1,
-            }}/>
 
         {state.params.activePath !== defaultSourcePath && 
           <Button icon="pi pi-chevron-left" 
