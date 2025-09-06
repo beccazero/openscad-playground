@@ -65,6 +65,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
+      with:
+        path: public/
   # Deployment job
   deploy:
     environment:
