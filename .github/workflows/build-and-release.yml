@@ -8,35 +8,18 @@ on:
 
 jobs:
   build-and-release:
-    runs-on: ubuntu-latest
-    
+    runs-on: ubuntu-24.04
+    env:
+      CI: true
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
+    - uses: actions/checkout@v4
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y wget make zip
-        
-    - name: Setup Docker for amd64 emulation (if needed)
-      run: |
-        docker run --privileged --rm tonistiigi/binfmt --install all
-        
-    - name: Build public assets
-      run: make public
-      
-    - name: Install npm dependencies
-      run: npm install
-      
-    - name: Build production bundle
-      run: NODE_ENV=production npm run build
+        node-version: 'lts/-2'
+    - run: npm install
+    - run: make public
+    - run: NODE_ENV=production npm run build
       
     - name: Create release archive
       run: |
@@ -65,22 +48,6 @@ jobs:
           OpenSCAD Playground Release ${{ steps.get_version.outputs.version }}
           
           This release contains the built OpenSCAD Playground application ready for deployment.
-          
-          ## Contents
-          - Complete web application bundle
-          - OpenSCAD WASM binary and libraries
-          - All required assets and dependencies
-          
-          ## Installation
-          1. Download the `openscad-playground-release.zip` file
-          2. Extract to your web server directory
-          3. Serve the contents via HTTP/HTTPS
-          
-          ## Features
-          - Web-based OpenSCAD editor with live preview
-          - Syntax highlighting and autocomplete
-          - Built-in library support
-          - PWA support for offline use
         files: openscad-playground-release.zip
         draft: false
         prerelease: false
