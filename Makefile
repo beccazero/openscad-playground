@@ -37,7 +37,8 @@ public: \
 		public/libraries/openscad_attachable_text3d.zip \
 		public/libraries/brailleSCAD.zip \
 		public/libraries/UB.scad.zip \
-		public/libraries/lasercut.zip
+		public/libraries/lasercut.zip \
+		public/libraries/gridfinity_extended_openscad.zip
 
 clean:
 	rm -fR libs build
@@ -196,6 +197,7 @@ public/libraries/MCAD.zip: libs/MCAD
 libs/boltsparts:
 	git clone --recurse https://github.com/boltsparts/boltsparts.git ${SHALLOW} ${SINGLE_BRANCH_MAIN} $@
 
+
 public/libraries/boltsparts.zip: libs/boltsparts
 	mkdir -p public/libraries
 	( cd libs/boltsparts/openscad ; zip -r ../../../public/libraries/boltsparts.zip `find . -name '*.scad' | grep -v tests` ../LICENSE )
@@ -283,3 +285,9 @@ public/libraries/lasercut.zip: libs/lasercut
 	mkdir -p public/libraries
 	( cd libs/lasercut ; zip -r ../../public/libraries/lasercut.zip *.scad LICENSE )
 	
+libs/gridfinity_extended_openscad:
+	git clone --recurse https://github.com/ostat/gridfinity_extended_openscad.git ${SHALLOW} ${SINGLE_BRANCH_MAIN} $@
+
+public/libraries/gridfinity_extended_openscad.zip: libs/gridfinity_extended_openscad
+	mkdir -p public/libraries
+	( cd libs/gridfinity_extended_openscad ; zip -r ../../public/libraries/gridfinity_extended_openscad.zip *.scad modules/ demos/ combined/ LICENSE )
