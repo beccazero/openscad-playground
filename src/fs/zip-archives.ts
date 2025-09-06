@@ -221,10 +221,24 @@ export const zipArchives: ZipArchives = {
       include: [{glob: ['**/*.scad', 'LICENSE']}],
     },
   },
+  'gridfinity_openscad': {
+    gitOrigin: {
+      branch: 'main',
+      repoUrl: 'https://github.com/vector76/gridfinity_openscad.git',
+      include: [{glob: ['**/*.scad', 'LICENSE']}],
+    },
+  },
   'gridfinity_extended_openscad': {
     gitOrigin: {
       branch: 'main',
       repoUrl: 'https://github.com/ostat/gridfinity_extended_openscad.git',
+      include: [{glob: ['**/*.scad', 'LICENSE']}],
+    },
+  },
+  'gridfinity_grips_baseplates': {
+    gitOrigin: {
+      branch: 'main',
+      repoUrl: 'https://github.com/jpypi/GRIPS.git',
       include: [{glob: ['**/*.scad', 'LICENSE']}],
     },
   },

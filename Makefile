@@ -38,6 +38,8 @@ public: \
 		public/libraries/brailleSCAD.zip \
 		public/libraries/UB.scad.zip \
 		public/libraries/lasercut.zip \
+		public/libraries/gridfinity_openscad.zip \
+		public/libraries/gridfinity_grips_baseplates.zip \
 		public/libraries/gridfinity_extended_openscad.zip
 
 clean:
@@ -68,10 +70,10 @@ libs/openscad-wasm:
 	( cd libs/openscad-wasm && unzip ../openscad-wasm.zip )
 	
 public/openscad.js: libs/openscad-wasm libs/openscad-wasm/openscad.js
-	ln -sf libs/openscad-wasm/openscad.js public/openscad.js
+	cp libs/openscad-wasm/openscad.js public/openscad.js
 		
 public/openscad.wasm: libs/openscad-wasm libs/openscad-wasm/openscad.wasm
-	ln -sf libs/openscad-wasm/openscad.wasm public/openscad.wasm
+	cp libs/openscad-wasm/openscad.wasm public/openscad.wasm
 
 # Var w/ noto fonts
 NOTO_FONTS=\
@@ -285,9 +287,23 @@ public/libraries/lasercut.zip: libs/lasercut
 	mkdir -p public/libraries
 	( cd libs/lasercut ; zip -r ../../public/libraries/lasercut.zip *.scad LICENSE )
 	
+libs/gridfinity_openscad:
+	git clone --recurse https://github.com/vector76/gridfinity_openscad.git ${SHALLOW} ${SINGLE_BRANCH_MAIN} $@
+
+public/libraries/gridfinity_openscad.zip: libs/gridfinity_openscad
+	mkdir -p public/libraries
+	( cd libs/gridfinity_openscad ; zip -r ../../public/libraries/gridfinity_openscad.zip *.scad LICENSE )
+
 libs/gridfinity_extended_openscad:
 	git clone --recurse https://github.com/ostat/gridfinity_extended_openscad.git ${SHALLOW} ${SINGLE_BRANCH_MAIN} $@
 
 public/libraries/gridfinity_extended_openscad.zip: libs/gridfinity_extended_openscad
 	mkdir -p public/libraries
 	( cd libs/gridfinity_extended_openscad ; zip -r ../../public/libraries/gridfinity_extended_openscad.zip *.scad modules/ demos/ combined/ LICENSE )
+
+libs/gridfinity_grips_baseplates:
+	git clone --recurse https://github.com/jpypi/GRIPS.git ${SHALLOW} ${SINGLE_BRANCH} $@
+
+public/libraries/gridfinity_grips_baseplates.zip: libs/gridfinity_grips_baseplates
+	mkdir -p public/libraries
+	( cd libs/gridfinity_grips_baseplates ; zip -r ../../public/libraries/gridfinity_grips_baseplates.zip *.scad LICENSE )
